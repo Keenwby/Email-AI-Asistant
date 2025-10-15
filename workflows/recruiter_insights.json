@@ -1,0 +1,111 @@
+{
+  "name": "Recruiter Insights Collector",
+  "nodes": [
+    {
+      "parameters": {
+        "triggerOn": "manual"
+      },
+      "id": "1",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "getAll",
+        "additionalFields": {
+          "q": "from:(recruiter OR talent) has:attachment",
+          "maxResults": 50
+        }
+      },
+      "id": "2",
+      "name": "Gmail - Fetch Messages",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 1,
+      "position": [
+        300,
+        200
+      ],
+      "credentials": {
+        "gmailOAuth2Api": "Gmail OAuth"
+      }
+    },
+    {
+      "parameters": {
+        "functionCode": "const results = []\nfor (const item of items) {\n  const payload = item.json;\n  const subject = payload.payload.headers.find((h) => h.name === 'Subject')?.value || '';\n  const sender = payload.payload.headers.find((h) => h.name === 'From')?.value || '';\n  const receivedAt = new Date(Number(payload.internalDate)).toISOString();\n  const body = (payload.payload.parts || []).find((part) => part.mimeType === 'text/plain')?.body?.data || '';\n  const decodedBody = Buffer.from(body, 'base64').toString('utf8');\n  const companyMatch = decodedBody.match(/\\b(?:at|from)\\s+([A-Z][A-Za-z0-9&'\\- ]+)/);\n  const jobLinks = decodedBody.match(/https?:\\/\\/\\S+(?:jobs?|careers|apply)\\S*/gi) || [];\n  results.push({\n    subject,\n    sender,\n    receivedAt,\n    company: companyMatch ? companyMatch[1] : '',\n    jobLinks: jobLinks.join(', ')\n  });\n}\nreturn results.map((entry) => ({ json: entry }));"
+      },
+      "id": "3",
+      "name": "Transform to Insights",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [
+        540,
+        200
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "sheetId": "1AbcYourSheetIdHere",
+        "range": "RecruiterInsights!A:D",
+        "options": {
+          "valueInputMode": "USER_ENTERED"
+        },
+        "columns": [
+          "Received At",
+          "Sender",
+          "Company",
+          "Job Links"
+        ],
+        "addColumns": true
+      },
+      "id": "4",
+      "name": "Google Sheets - Append",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 1,
+      "position": [
+        780,
+        200
+      ],
+      "credentials": {
+        "googleApi": "Google Sheets"
+      }
+    }
+  ],
+  "connections": {
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Gmail - Fetch Messages",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gmail - Fetch Messages": {
+      "main": [
+        [
+          {
+            "node": "Transform to Insights",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Transform to Insights": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets - Append",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}
