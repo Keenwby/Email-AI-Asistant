@@ -17,6 +17,12 @@ This project bootstraps a personal email intelligence assistant capable of colle
 | `scripts/` | CLI entry points that drive the MVP workflows. |
 | `workflows/` | Exported n8n workflows for visual orchestration and automation. |
 | `docs/` | Architecture notes and operational runbooks. |
+| `docs/ghp/` | Technical onboarding pack designed for GitHub Pages. |
+
+## Documentation
+
+- Start with the GitHub Pages pack at `docs/ghp/index.md` for a system-level introduction (architecture, components, data flow).
+- Non-technical onboarding begins with `docs/guides/user-guide.md`; see `docs/guides/index.md` for the evolving guide catalog.
 
 ## Getting started
 

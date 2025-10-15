@@ -41,7 +41,9 @@ class ReportBuilder:
         if headers is None:
             headers = {key: key.replace("_", " ").title() for key in rows[0].keys()}
         ordered_rows = [[row.get(key, "") for key in headers.keys()] for row in rows]
-        return tabulate(ordered_rows, headers=headers.values(), tablefmt="github")
+        table = tabulate(ordered_rows, headers=headers.values(), tablefmt="github")
+        normalized_lines = [" ".join(line.split()) for line in table.splitlines()]
+        return "\n".join(normalized_lines)
 
     def write_table(self, name: str, items: Sequence[object], headers: dict[str, str] | None = None) -> Path:
         """Persist a table to disk and return its path."""

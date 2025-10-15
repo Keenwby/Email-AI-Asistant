@@ -1,0 +1,6 @@
+theme: minima
+title: Email AI Assistant Docs
+description: Technical and non-technical documentation for the Email AI Assistant MVP.
+baseurl: ""
+url: ""
+markdown: kramdown
