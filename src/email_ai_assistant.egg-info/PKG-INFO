@@ -1,0 +1,116 @@
+Metadata-Version: 2.4
+Name: email-ai-assistant
+Version: 0.1.0
+Summary: MVP toolkit for an email-focused AI assistant with n8n workflows
+Author-email: Your Name <you@example.com>
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: google-api-python-client>=2.100.0
+Requires-Dist: google-auth-oauthlib>=1.0.0
+Requires-Dist: pydantic>=2.5.0
+Requires-Dist: python-dateutil>=2.8.2
+Requires-Dist: tabulate>=0.9.0
+Requires-Dist: typer>=0.9.0
+Provides-Extra: dev
+Requires-Dist: black>=23.0.0; extra == "dev"
+Requires-Dist: isort>=5.12.0; extra == "dev"
+Requires-Dist: mypy>=1.7.0; extra == "dev"
+Requires-Dist: pytest>=7.4.0; extra == "dev"
+Dynamic: license-file
+
+# Email AI Assistant MVP
+
+This project bootstraps a personal email intelligence assistant capable of collecting and organizing information about recruiters, job opportunities, and subscription usage. The Minimum Viable Product (MVP) focuses on data collection, reporting, and workflow orchestration. Later phases can extend the same foundation to automate responses or unsubscribe from low-value newsletters.
+
+## Project goals
+
+* **Email intelligence hub** – aggregate emails from Gmail (or any IMAP service) into structured datasets that can be searched and analyzed.
+* **Recruiter and job discovery** – extract recruiter contact information, company details, and links to job descriptions.
+* **Subscription awareness** – surface recurring newsletters and quantify their volume to support future unsubscribe automation.
+* **Workflow-first design** – provide ready-to-use n8n flows that orchestrate data ingestion, enrichment, and reporting.
+
+## Repository layout
+
+| Path | Purpose |
+| ---- | ------- |
+| `src/email_ai_assistant` | Python package with reusable ingestion, enrichment, and reporting logic. |
+| `scripts/` | CLI entry points that drive the MVP workflows. |
+| `workflows/` | Exported n8n workflows for visual orchestration and automation. |
+| `docs/` | Architecture notes and operational runbooks. |
+| `docs/ghp/` | Technical onboarding pack designed for GitHub Pages. |
+
+## Documentation
+
+- Start with the GitHub Pages pack at `docs/ghp/index.md` for a system-level introduction (architecture, components, data flow).
+- Non-technical onboarding begins with `docs/guides/user-guide.md`; see `docs/guides/index.md` for the evolving guide catalog.
+
+## Getting started
+
+1. **Install dependencies**
+
+   ```bash
+   python -m venv .venv
+   source .venv/bin/activate
+   pip install -e .[dev]
+   ```
+
+2. **Create Google API credentials**
+   * Follow the [Gmail API quickstart](https://developers.google.com/gmail/api/quickstart/python) to create OAuth client credentials and enable the Gmail API.
+   * Save the downloaded `credentials.json` in a secure location (default: `~/.credentials/email-ai-assistant/credentials.json`).
+
+3. **Configure environment variables**
+
+   Copy `.env.example` to `.env` and update the values for your workspace:
+
+   ```bash
+   cp .env.example .env
+   ```
+
+   | Variable | Description |
+   | -------- | ----------- |
+   | `GOOGLE_APPLICATION_CREDENTIALS` | Path to your OAuth credentials JSON file. |
+   | `PRIMARY_EMAIL` | The email address that should be analyzed. |
+   | `OPENAI_API_KEY` | Optional. Enables LLM summarization for recruiter emails. |
+
+4. **Run the MVP recruiter report**
+
+   ```bash
+   python scripts/run_mvp.py recruiters
+   ```
+
+5. **Load the n8n workflows**
+   * Import any JSON file in `workflows/` into your n8n instance.
+   * Update node credentials to match your environment (Gmail, HTTP requests, Google Sheets, etc.).
+
+## Testing
+
+After installing the development dependencies you can run the automated tests and a quick smoke check for the CLI:
+
+```bash
+pytest
+python scripts/run_mvp.py --help
+```
+
+The test suite exercises the recruiter and subscription analyzers as well as the Markdown report generator to ensure
+their behavior remains stable. The CLI help command confirms that the Typer-based entry point is wired correctly without
+requiring live Gmail credentials.
+
+## Roadmap
+
+| Phase | Theme | Highlights |
+| ----- | ----- | ---------- |
+| MVP | Insight gathering | Gmail ingestion, recruiter & subscription analytics, tabular reports. |
+| Phase 2 | Action automation | Smart replies, bulk unsubscribe workflows, calendar coordination. |
+| Phase 3 | Proactive agent | Contextual recommendations, goal-tracking dashboards, multi-channel support (Slack, SMS). |
+
+## Contributing
+
+1. Fork the repository.
+2. Create a feature branch.
+3. Make your changes and run the test suite.
+4. Submit a pull request.
+
+---
+
+This project is distributed under the terms of the MIT License. See [LICENSE](LICENSE) for details.

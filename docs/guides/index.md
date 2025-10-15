@@ -11,6 +11,7 @@ This directory will host non-technical documentation aimed at operators, end use
 | Guide | Status | Purpose |
 | ----- | ------ | ------- |
 | [`user-guide.md`](user-guide.md) | Drafted | Day-to-day walkthrough for running reports and interpreting outputs. |
+| [`gmail-oauth.md`](gmail-oauth.md) | Drafted | Step-by-step instructions for creating Gmail OAuth credentials. |
 
 ## How It Relates to the Technical Pack
 

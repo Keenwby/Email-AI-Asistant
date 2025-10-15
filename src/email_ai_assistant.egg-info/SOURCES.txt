@@ -1,0 +1,17 @@
+LICENSE
+README.md
+pyproject.toml
+src/email_ai_assistant/__init__.py
+src/email_ai_assistant/config.py
+src/email_ai_assistant/gmail_client.py
+src/email_ai_assistant/reporting.py
+src/email_ai_assistant.egg-info/PKG-INFO
+src/email_ai_assistant.egg-info/SOURCES.txt
+src/email_ai_assistant.egg-info/dependency_links.txt
+src/email_ai_assistant.egg-info/requires.txt
+src/email_ai_assistant.egg-info/top_level.txt
+src/email_ai_assistant/analyzers/recruiter.py
+src/email_ai_assistant/analyzers/subscriptions.py
+tests/test_recruiter_analyzer.py
+tests/test_reporting.py
+tests/test_subscriptions_analyzer.py
